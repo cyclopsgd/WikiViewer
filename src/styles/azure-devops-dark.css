@@ -1,0 +1,104 @@
+/* Azure DevOps Dark Theme */
+
+:root[data-theme="dark"] {
+  /* Primary Colors */
+  --primary-color: #3794ff;
+  --primary-hover-color: #579dff;
+
+  /* Background Colors */
+  --topbar-background: #1f1f1f;
+  --sidebar-background: #252526;
+  --content-background: #1e1e1e;
+  --modal-background: #252526;
+  --dropdown-background: #252526;
+
+  /* Text Colors */
+  --text-color: #cccccc;
+  --text-secondary: #8c8c8c;
+  --heading-color: #e0e0e0;
+  --icon-color: #c5c5c5;
+
+  /* Border Colors */
+  --border-color: #3f3f46;
+
+  /* Link Colors */
+  --link-color: #3794ff;
+
+  /* Hover/Active States */
+  --hover-background: #2a2d2e;
+  --active-background: #37373d;
+  --button-background: #3c3c3c;
+  --button-hover-background: #505050;
+
+  /* Input Colors */
+  --input-background: #3c3c3c;
+  --input-readonly-background: #2d2d30;
+
+  /* Code Colors */
+  --code-background: #2d2d30;
+  --code-color: #ce9178;
+
+  /* Table Colors */
+  --table-header-background: #2d2d30;
+  --table-row-background: #252526;
+
+  /* TOC Colors */
+  --toc-background: #252526;
+
+  /* Details Colors */
+  --details-background: #252526;
+
+  /* Error Colors */
+  --error-color: #f48771;
+  --error-background: #5a1d1d;
+  --error-border: #be1100;
+
+  /* Highlight Colors */
+  --highlight-background: #5a5a00;
+
+  /* Scrollbar Colors */
+  --scrollbar-track: #1e1e1e;
+  --scrollbar-thumb: #424242;
+  --scrollbar-thumb-hover: #4f4f4f;
+
+  /* Priority 2 Feature Colors */
+  --mention-background: #1a3a52;
+  --workitem-background: #3d2f1f;
+  --workitem-border: #5c4a2f;
+  --workitem-hover-background: #4a3a26;
+  --attachment-background: #2d2d30;
+}
+
+/* Fix KaTeX math in dark mode */
+:root[data-theme="dark"] .katex {
+  color: #cccccc !important;
+}
+
+:root[data-theme="dark"] .katex .mord,
+:root[data-theme="dark"] .katex .mbin,
+:root[data-theme="dark"] .katex .mrel,
+:root[data-theme="dark"] .katex .mopen,
+:root[data-theme="dark"] .katex .mclose,
+:root[data-theme="dark"] .katex .mpunct {
+  color: #cccccc !important;
+}
+
+:root[data-theme="dark"] .katex-display {
+  background-color: #2d2d30;
+  padding: 16px;
+  border-radius: 4px;
+  margin: 16px 0;
+}
+
+/* Fix table text in dark mode */
+:root[data-theme="dark"] #markdown-content table {
+  color: #cccccc;
+}
+
+:root[data-theme="dark"] #markdown-content table th {
+  color: #e0e0e0;
+}
+
+:root[data-theme="dark"] #markdown-content table td {
+  color: #cccccc;
+}

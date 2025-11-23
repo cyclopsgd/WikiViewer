@@ -1,0 +1,70 @@
+/* Azure DevOps Light Theme */
+
+:root[data-theme="light"] {
+  /* Primary Colors */
+  --primary-color: #0078d4;
+  --primary-hover-color: #106ebe;
+
+  /* Background Colors */
+  --topbar-background: #ffffff;
+  --sidebar-background: #f3f2f1;
+  --content-background: #ffffff;
+  --modal-background: #ffffff;
+  --dropdown-background: #ffffff;
+
+  /* Text Colors */
+  --text-color: #323130;
+  --text-secondary: #605e5c;
+  --heading-color: #323130;
+  --icon-color: #605e5c;
+
+  /* Border Colors */
+  --border-color: #edebe9;
+
+  /* Link Colors */
+  --link-color: #0078d4;
+
+  /* Hover/Active States */
+  --hover-background: #f3f2f1;
+  --active-background: #e1dfdd;
+  --button-background: #ffffff;
+  --button-hover-background: #f3f2f1;
+
+  /* Input Colors */
+  --input-background: #ffffff;
+  --input-readonly-background: #f3f2f1;
+
+  /* Code Colors */
+  --code-background: #f3f2f1;
+  --code-color: #a31515;
+
+  /* Table Colors */
+  --table-header-background: #f3f2f1;
+  --table-row-background: #faf9f8;
+
+  /* TOC Colors */
+  --toc-background: #faf9f8;
+
+  /* Details Colors */
+  --details-background: #faf9f8;
+
+  /* Error Colors */
+  --error-color: #a80000;
+  --error-background: #fef0f0;
+  --error-border: #eeacac;
+
+  /* Highlight Colors */
+  --highlight-background: #ffff00;
+
+  /* Scrollbar Colors */
+  --scrollbar-track: #f3f2f1;
+  --scrollbar-thumb: #c8c6c4;
+  --scrollbar-thumb-hover: #a19f9d;
+
+  /* Priority 2 Feature Colors */
+  --mention-background: #e6f2ff;
+  --workitem-background: #fff4e6;
+  --workitem-border: #ffd699;
+  --workitem-hover-background: #ffe6b3;
+  --attachment-background: #faf9f8;
+}

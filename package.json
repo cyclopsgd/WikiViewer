@@ -1,0 +1,63 @@
+{
+  "name": "georges-azure-devops-wiki-viewer",
+  "version": "1.0.0",
+  "description": "George's offline Azure DevOps wiki markdown viewer",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --x64",
+    "build:dir": "electron-builder --win --x64 --dir",
+    "dev": "electron . --dev"
+  },
+  "keywords": [
+    "electron",
+    "wiki",
+    "markdown",
+    "azure-devops"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^39.2.3",
+    "electron-builder": "^24.9.1"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.3",
+    "electron-store": "^8.1.0",
+    "highlight.js": "^11.9.0",
+    "katex": "^0.16.9",
+    "markdown-it": "^14.0.0",
+    "markdown-it-anchor": "^8.6.7",
+    "markdown-it-emoji": "^3.0.0",
+    "markdown-it-texmath": "^1.0.0",
+    "markdown-it-task-lists": "^2.1.1",
+    "mermaid": "^10.6.1"
+  },
+  "build": {
+    "appId": "com.george.azuredevops.wikiviewer",
+    "productName": "George's Azure DevOps Wiki Viewer",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ]
+  }
+}

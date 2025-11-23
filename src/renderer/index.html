@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>George's Azure DevOps Wiki Viewer</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/azure-devops-light.css" id="theme-light">
+    <link rel="stylesheet" href="../styles/azure-devops-dark.css" id="theme-dark" disabled>
+
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="../../node_modules/highlight.js/styles/vs.css" id="highlight-light">
+    <link rel="stylesheet" href="../../node_modules/highlight.js/styles/vs2015.css" id="highlight-dark" disabled>
+
+    <!-- KaTeX for mathematical notation -->
+    <link rel="stylesheet" href="../../node_modules/katex/dist/katex.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Top Bar -->
+        <div id="top-bar">
+            <div id="breadcrumbs"></div>
+            <div id="top-bar-actions">
+                <div id="search-container">
+                    <input type="text" id="search-input" placeholder="Search files...">
+                    <div id="search-results" class="hidden"></div>
+                </div>
+                <button id="refresh-btn" class="icon-btn" title="Refresh">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                        <path fill="currentColor" d="M13.65 2.35c-1.78-1.78-4.68-1.78-6.46 0L6.12 3.42l1.06 1.06 1.07-1.07c1.17-1.17 3.07-1.17 4.24 0 1.17 1.17 1.17 3.07 0 4.24l-2.12 2.12c-1.17 1.17-3.07 1.17-4.24 0-.29-.29-.51-.64-.65-1.02l-1.38.58c.22.56.54 1.08.96 1.5 1.78 1.78 4.68 1.78 6.46 0l2.12-2.12c1.79-1.78 1.79-4.68.01-6.46z"/>
+                        <path fill="currentColor" d="M6.88 11.53L5.82 12.6c-1.17 1.17-3.07 1.17-4.24 0-1.17-1.17-1.17-3.07 0-4.24l2.12-2.12c1.17-1.17 3.07-1.17 4.24 0 .29.29.51.64.65 1.02l1.38-.58c-.22-.56-.54-1.08-.96-1.5-1.78-1.78-4.68-1.78-6.46 0L.43 7.3c-1.78 1.78-1.78 4.68 0 6.46 1.78 1.78 4.68 1.78 6.46 0l1.06-1.07-1.07-1.16z"/>
+                    </svg>
+                </button>
+                <button id="settings-btn" class="icon-btn" title="Settings">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                        <path fill="currentColor" d="M14.5 8c0-.34-.03-.67-.08-1l1.47-1.15a.5.5 0 00.12-.64l-1.5-2.6a.5.5 0 00-.61-.22l-1.74.7c-.36-.28-.76-.5-1.18-.68L10.5.5a.5.5 0 00-.5-.5h-3a.5.5 0 00-.5.5l-.48 1.91c-.42.18-.82.4-1.18.68l-1.74-.7a.5.5 0 00-.61.22l-1.5 2.6a.5.5 0 00.12.64L2.58 7c-.05.33-.08.66-.08 1s.03.67.08 1l-1.47 1.15a.5.5 0 00-.12.64l1.5 2.6c.11.2.35.28.61.22l1.74-.7c.36.28.76.5 1.18.68l.48 1.91c.04.28.26.5.5.5h3c.24 0 .46-.22.5-.5l.48-1.91c.42-.18.82-.4 1.18-.68l1.74.7c.26.11.5.02.61-.22l1.5-2.6a.5.5 0 00-.12-.64L14.42 9c.05-.33.08-.66.08-1zM8 11c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div id="main-content">
+            <!-- Sidebar (File Tree) -->
+            <div id="sidebar">
+                <div id="sidebar-header">
+                    <h3>Wiki Explorer</h3>
+                    <button id="select-folder-btn" class="btn-secondary">Select Folder</button>
+                </div>
+                <div id="file-tree"></div>
+            </div>
+
+            <!-- Resize Handle -->
+            <div id="resize-handle"></div>
+
+            <!-- Content Viewer -->
+            <div id="content-viewer">
+                <div id="welcome-screen">
+                    <div class="welcome-content">
+                        <svg width="64" height="64" viewBox="0 0 16 16" style="opacity: 0.3;">
+                            <path fill="currentColor" d="M14.85 3H1.15C.52 3 0 3.52 0 4.15v7.69C0 12.48.52 13 1.15 13h13.69c.64 0 1.15-.52 1.15-1.15v-7.7C16 3.52 15.48 3 14.85 3zM9 11H7V8L5.5 9.92 4 8v3H2V5h2l1.5 2L7 5h2v6zm2.99.5L9.5 8H11V5h2v3h1.5l-2.51 3.5z"/>
+                        </svg>
+                        <h2>Welcome to George's Azure DevOps Wiki Viewer</h2>
+                        <p>Select a wiki folder to get started</p>
+                        <button id="welcome-select-btn" class="btn-primary">Select Wiki Folder</button>
+                    </div>
+                </div>
+                <div id="markdown-content" class="hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button id="close-settings" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label for="wiki-path-display">Wiki Folder Path</label>
+                    <div class="input-group">
+                        <input type="text" id="wiki-path-display" readonly>
+                        <button id="change-folder-btn" class="btn-secondary">Change Folder</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label for="theme-select">Theme</label>
+                    <select id="theme-select">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                        <option value="system">System</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label>
+                        <input type="checkbox" id="remember-last-page">
+                        Remember last viewed page
+                    </label>
+                </div>
+
+                <div class="setting-group">
+                    <label>
+                        <input type="checkbox" id="auto-reload">
+                        Auto-reload on file changes
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-settings" class="btn-primary">Save</button>
+                <button id="cancel-settings" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Load Mermaid library first (works better via script tag in Electron) -->
+    <script src="../../node_modules/mermaid/dist/mermaid.min.js"></script>
+
+    <!-- Load application scripts -->
+    <script src="markdown-renderer.js"></script>
+    <script src="file-tree.js"></script>
+    <script src="search.js"></script>
+    <script src="settings.js"></script>
+    <script src="renderer.js"></script>
+</body>
+</html>
