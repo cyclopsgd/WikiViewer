@@ -24,6 +24,21 @@ const settingsBtn = document.getElementById('settings-btn');
 async function init() {
   console.log('Initializing application...');
 
+  // Add global click handler to catch ALL anchor clicks as absolute fallback
+  document.addEventListener('click', (e) => {
+    const anchor = e.target.closest('a');
+    if (anchor && anchor.href) {
+      const href = anchor.getAttribute('href');
+      // If href is not http/https and not javascript:void(0), prevent it
+      if (href && !href.startsWith('http://') && !href.startsWith('https://') &&
+          !href.startsWith('javascript:') && href !== '#') {
+        console.log('Global safety net: Preventing navigation to:', href);
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }
+  }, true); // Capture phase
+
   // Verify DOM elements
   console.log('Welcome select button:', welcomeSelectBtn);
   console.log('Select folder button:', selectFolderBtn);

@@ -22,7 +22,7 @@ if (window.mermaid && typeof window.mermaid.initialize === 'function') {
 // Initialize markdown-it with plugins
 const md = markdownIt({
   html: true, // Enable HTML tags in source
-  linkify: true, // Auto-convert URL-like text to links
+  linkify: false, // Disable auto-linking (prevents index.md from becoming a link)
   typographer: true,
   breaks: false, // Azure DevOps uses 2 spaces for line breaks
   highlight: function (str, lang) {
@@ -98,9 +98,12 @@ md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
   if (hrefIndex >= 0) {
     const href = token.attrs[hrefIndex][1];
 
-    // Check if it's an external link (http/https)
-    if (href.startsWith('http://') || href.startsWith('https://')) {
-      // Add target="_blank" for external links
+    // Check if it's a REAL external link (http/https with proper domain)
+    // Be very strict: must start with http:// or https:// followed by domain
+    const isRealExternalLink = /^https?:\/\/[a-zA-Z0-9]/.test(href);
+
+    if (isRealExternalLink) {
+      // Real external link - open in browser
       token.attrPush(['target', '_blank']);
       token.attrPush(['rel', 'noopener noreferrer']);
       token.attrPush(['class', 'external-link']);
@@ -108,9 +111,15 @@ md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
       // Anchor link - keep as is
       token.attrPush(['class', 'anchor-link']);
     } else {
-      // Internal link - mark for special handling
+      // Everything else is an internal link (even if linkify added http://)
+      // Strip any http:// prefix that linkify might have added
+      let cleanHref = href;
+      if (href.startsWith('http://') || href.startsWith('https://')) {
+        cleanHref = href.replace(/^https?:\/\//, '');
+      }
+
       token.attrPush(['class', 'internal-link']);
-      token.attrPush(['data-href', href]);
+      token.attrPush(['data-href', cleanHref]);
       // Use javascript:void(0) to prevent any navigation
       token.attrs[hrefIndex][1] = 'javascript:void(0)';
     }
@@ -176,6 +185,10 @@ function processAzureDevOpsSyntax(content, currentFilePath) {
     if (pageName.startsWith('_') && pageName.endsWith('_')) {
       return match;
     }
+    // Skip if it's an attachment link (will be processed separately)
+    if (pageName.toLowerCase().startsWith('attachment:')) {
+      return match;
+    }
 
     // Handle [[Page-Name|Display Text]] syntax
     let fileName, displayName;
@@ -203,7 +216,7 @@ function processAzureDevOpsSyntax(content, currentFilePath) {
 
   // Process attachment links - [[attachment:filename.ext]]
   content = content.replace(/\[\[attachment:([^\]]+)\]\]/gi, (match, filename) => {
-    return `<a href="#" class="attachment-link" data-attachment="${filename}">📎 ${filename}</a>`;
+    return `<a href="javascript:void(0)" class="attachment-link" data-attachment="${filename}">📎 ${filename}</a>`;
   });
 
   // Process ::: mermaid blocks
@@ -264,7 +277,7 @@ function generateTOC(html) {
       currentLevel--;
     }
 
-    toc += `<li><a href="#${id}">${text}</a></li>\n`;
+    toc += `<li><a href="#${id}" class="anchor-link">${text}</a></li>\n`;
   });
 
   // Close remaining lists
@@ -313,7 +326,8 @@ async function generateTOSP(currentFilePath) {
     mdFiles.forEach(file => {
       const nameWithoutExt = path.basename(file, path.extname(file));
       const displayName = nameWithoutExt.replace(/-/g, ' ');
-      tosp += `<li><a href="${file}">${displayName}</a></li>\n`;
+      // Create proper internal links with class and data-href
+      tosp += `<li><a href="javascript:void(0)" class="internal-link" data-href="${file}">${displayName}</a></li>\n`;
     });
     tosp += '</ul>\n</nav>';
 
@@ -486,6 +500,12 @@ function processInternalLinks(container, currentFilePath) {
         console.log('Scrolling to anchor:', targetId);
         targetElement.scrollIntoView({ behavior: 'smooth' });
       }
+    }
+    // Attachment links
+    else if (anchor.classList.contains('attachment-link')) {
+      const attachment = anchor.getAttribute('data-attachment');
+      console.log('Attachment link clicked:', attachment);
+      alert(`Attachment links are for reference only in offline mode.\n\nAttachment: ${attachment}\n\nIn Azure DevOps online, this would download the file.`);
     }
     // Catch-all for any other links - prevent navigation
     else {

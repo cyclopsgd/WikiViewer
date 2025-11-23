@@ -24,13 +24,20 @@ function createWindow() {
 
   mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
 
-  // Prevent navigation to .md files (handle them via IPC instead)
+  // Prevent ALL navigation except for index.html
   mainWindow.webContents.on('will-navigate', (event, url) => {
-    // Block navigation to .md or .markdown files (but not to index.html)
-    if ((url.endsWith('.md') || url.endsWith('.markdown')) && !url.includes('index.html')) {
+    // Only allow navigation to index.html (our main app page)
+    if (!url.includes('index.html')) {
       event.preventDefault();
       console.log('Main process: Blocked navigation to:', url);
     }
+  });
+
+  // Also prevent new window creation
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    console.log('Main process: Blocked new window to:', url);
+    // Don't allow any new windows from webContents
+    return { action: 'deny' };
   });
 
   mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
